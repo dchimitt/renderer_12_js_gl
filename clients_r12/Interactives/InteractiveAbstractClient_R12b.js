@@ -377,16 +377,39 @@ export function defaultHandleKeyDown(e)
         }
         else if('u' == c)
         {   
+            const radian90 = 90 * Math.PI/180 
+            eyeRotX += Math.PI/180 // one radian
+
+            //centerY = Math.sin(eyeRotX);
+            //centerZ = Math.cos(eyeRotX);
+
+            //upY = Math.sin(radian90 + eyeRotX);
+            //upZ = Math.sin(radian90 + eyeRotX);
+            
+            eyeY = cameraDistance * Math.sin(eyeRotX);
+            eyeZ = cameraDistance * Math.cos(eyeRotX);
+
+            upY = Math.sin(radian90 + eyeRotX);
+            upZ = Math.sin(radian90 + eyeRotX);
+
             // rotate the camera around the scene
             // have to also update what 'up' is to keep the 
             // up vector to be 90 degrees 'before' the camera
-            //eyeRotX += 1;
+            //eyeRotX += 1 * Math.PI/180;
             //eyeY += eyeZ * Math.sin(eyeRotX);
             //eyeZ += eyeZ * Math.cos(eyeRotX);
-//
+
             //upY += Math.sin(Math.PI/4 + eyeRotX);
             //upZ += Math.cos(Math.PI/4 + eyeRotX);
-            centerY -= .1;
+            
+            //eyeRotX += 1 * Math.PI/180;
+            //centerY = Math.sin(eyeRotX);
+            //centerZ = Math.cos(eyeRotX);
+
+            //upY = Math.sin(Math.PI/4 + eyeRotX);
+            //upZ = Math.cos(Math.PI/4 + eyeRotX);
+
+            //centerY -= .1;
         }
         else if('U' == c)
         {    
@@ -438,6 +461,9 @@ export function defaultHandleKeyDown(e)
             upY = 1.0;
             upZ = 0.0;
             eyeZoom = 1;
+            eyeRotX = 0;
+            eyeRotY = 0;
+            eyeRotZ = 0;
         }
 
         //setTransformations(e);
