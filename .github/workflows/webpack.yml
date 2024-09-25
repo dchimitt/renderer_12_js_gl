@@ -26,11 +26,23 @@ jobs:
         npm install
         npx webpack
 
-    - name: Upload
+    - name: UploadBundle
       uses: actions/upload-artifact@v4
       with:
         name: RendererBundle
-        path: ${{github.workspace}}/renderer_out/
+        path: ${{ github.workspace }}/renderer_out/
+
+    - name: Upload Index
+      uses: actions/upload-artifact@v4
+      with:
+        name: BundleIndex
+        path: ${{ github.workspace }}/testBundle.html
+
+    - name: Upload CSS
+      uses: actions/upload-artifact@v4
+      with:
+        name: BundleCSS
+        path: ${{ github.workspace }}/fileHTML.css
 
   deploy:
     needs: build
@@ -47,12 +59,24 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: RendererBundle
-        path: ${{github.workspace}}/uptorepo/
+        path: ${{ github.workspace }}/uptorepo/
+
+    - name: Get Index
+      uses: actions/download-artifact@v4
+      with:
+        name: BundleIndex
+        path: ${{ github.workspace }}/uptorepo/
+
+    - name: Get CSS
+      uses: actions/download-artifact@v4
+      with:
+        name: BundleCSS
+        path: ${{ github.workspace }}/uptorepo/
 
     - name: Publish Artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: ${{github.workspace}}/uptorepo/
+        path: ${{ github.workspace }}/uptorepo/
 
     - name: Deploy to Pages
       uses: actions/deploy-pages@v4
