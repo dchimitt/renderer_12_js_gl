@@ -14,10 +14,9 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import IMeshMaker from "../scene/util/MeshMaker.js";
 import {format} from "../scene/util/UtilExport.js";
 
-export default class BarycentricTriangle extends IMeshMaker {
+export default class BarycentricTriangle extends Model {
    /**@type {number}*/ #theta;
    /**@type {number}*/ #n;
 
@@ -31,11 +30,11 @@ export default class BarycentricTriangle extends IMeshMaker {
       @param {number} n          number of barycentric subdivisions of this triangle
       @param {number} [theta=0]  rotation (in degrees) of the equilateral triangle
    */
-   constructor(n, theta = 0) {
+   constructor( n, theta = 0 ) {
       super()
 
       if (n < 0)
-         throw new Error("n must be greater than or equal to 0");
+         throw new Error( "n must be greater than or equal to 0" );
 
       this.#theta = theta;
       this.#n = n;
@@ -43,7 +42,7 @@ export default class BarycentricTriangle extends IMeshMaker {
       let theta1 = theta * Math.PI/180.0,
           theta2 = 2.0 * Math.PI / 3.0;
 
-      this.superShape.addVertex(new Vertex( Math.cos(theta1),
+      this.addVertex(new Vertex( Math.cos(theta1),
                                  Math.sin(theta1),
                                  0.0),
                      new Vertex( Math.cos(theta1 + theta2),
@@ -53,7 +52,7 @@ export default class BarycentricTriangle extends IMeshMaker {
                                  Math.sin(theta1 + 2*theta2),
                                  0.0));
 
-      this.superShape.addPrimitive(LineSegment.buildVertex(0, 1),
+      this.addPrimitive(LineSegment.buildVertex(0, 1),
                         LineSegment.buildVertex(1, 2),
                         LineSegment.buildVertex(2, 0));
 
@@ -77,10 +76,10 @@ export default class BarycentricTriangle extends IMeshMaker {
    */
    barycentric(vIndex0, vIndex1, vIndex2, n)
    {
-      const v0 = this.superShape.vertexList[vIndex0],
-            v1 = this.superShape.vertexList[vIndex1],
-            v2 = this.superShape.vertexList[vIndex2];
-      const index = this.superShape.vertexList.length;
+      const v0 = this.vertexList[vIndex0],
+            v1 = this.vertexList[vIndex1],
+            v2 = this.vertexList[vIndex2];
+      const index = this.vertexList.length;
 
       if (n > 0)
       {
@@ -88,22 +87,22 @@ export default class BarycentricTriangle extends IMeshMaker {
          // https://en.wikipedia.org/wiki/Barycentric_subdivision
 
          // Add four vertices to the model.
-         this.superShape.addVertex(new Vertex(
+         this.addVertex(new Vertex(
          //         (1/3)*v0 + (1/3)*v1 + (1/3)*v2
                     (v0.x + v1.x + v2.x)/3.0,
                     (v0.y + v1.y + v2.y)/3.0,
                     (v0.z + v1.z + v2.z)/3.0));
-         this.superShape.addVertex(new Vertex(
+         this.addVertex(new Vertex(
          //         (1/2)*v0 + (1/2)*v1
                     (v0.x + v1.x)/2.0,
                     (v0.y + v1.y)/2.0,
                     (v0.z + v1.z)/2.0));
-         this.superShape.addVertex(new Vertex(
+         this.addVertex(new Vertex(
          //         (1/2)*v1 + (1/2)*v2
                     (v1.x + v2.x)/2.0,
                     (v1.y + v2.y)/2.0,
                     (v1.z + v2.z)/2.0));
-         this.superShape.addVertex(new Vertex(
+         this.addVertex(new Vertex(
          //         (1/2)*v2 + (1/2)*v0
                     (v2.x + v0.x)/2.0,
                     (v2.y + v0.y)/2.0,
@@ -114,7 +113,7 @@ export default class BarycentricTriangle extends IMeshMaker {
                vIndex12     = index + 2,
                vIndex20     = index + 3;
          // 6 new line segments
-         this.superShape.addPrimitive(LineSegment.buildVertex(vIndex0,  vIndexCenter),
+         this.addPrimitive(LineSegment.buildVertex(vIndex0,  vIndexCenter),
                            LineSegment.buildVertex(vIndex1,  vIndexCenter),
                            LineSegment.buildVertex(vIndex2,  vIndexCenter),
                            LineSegment.buildVertex(vIndex01, vIndexCenter),
