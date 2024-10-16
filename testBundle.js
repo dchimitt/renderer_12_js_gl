@@ -1,6 +1,6 @@
 const scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
-scene.getPosition(0).model = new renderer.Sphere( 1, 4, 4 );
+scene.getPosition(0).model = new renderer.Sphere();
 renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
@@ -9,7 +9,7 @@ setInterval(rotate, 1000/40);
 function rotate()
 {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
-    scene.getPosition( 0 ).model.remake( Math.floor( Math.random() * 20 ) + 5, Math.floor( Math.random() * 20 ) + 5 )
+    scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( Math.floor( Math.random() * 20 ) + 5, Math.floor( Math.random() * 20 ) + 5 )
     display();
 }
 
