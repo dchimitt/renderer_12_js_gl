@@ -9,6 +9,7 @@ setInterval(rotate, 1000/40);
 function rotate()
 {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
+    scene.getPosition( 0 ).model.remake( Math.floor( Math.random() * 20 ) + 5, Math.floor( Math.random() * 20 ) + 5 )
     display();
 }
 
