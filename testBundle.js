@@ -1,6 +1,6 @@
 const scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
-scene.getPosition(0).model = new renderer.Sphere();
+scene.getPosition(0).model = new renderer.Sphere( 1, 4, 4 );
 renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
