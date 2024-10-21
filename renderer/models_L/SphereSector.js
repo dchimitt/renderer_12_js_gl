@@ -213,7 +213,6 @@ export default class SphereSector extends Model
     */
    remake(n, k) {
       let sphereSec = new SphereSector(this.#r, this.#theta1, this.#theta2, this.#phi1, this.#phi2, n, k);
-      setColor( sphereSec, this.getColor() );
 
       return sphereSec
    }

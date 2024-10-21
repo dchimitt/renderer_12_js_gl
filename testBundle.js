@@ -10,7 +10,8 @@ function rotate()
 {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
     let x = Math.ceil( 30 * Math.sin( 0.25 * Date.now() ) + 35 )
-    scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( Math.floor( Math.random() * 20 ) + 5, Math.floor( Math.random() * 20 ) + 5 )
+    scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( x, x )
+    renderer.setColor( scene.getPosition( 0 ).model, scene.getPosition( 0 ).model.getColor() )
     display();
 }
 
