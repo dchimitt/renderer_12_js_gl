@@ -32,7 +32,7 @@ function display()
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
 }
 
-let dotDescription = DrawSceneGraph.sceneToDot( scene )
-instance().then( function( viz ) {
+let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
+renderer.instance().then( function( viz ) {
     document.body.appendChild( viz.renderSVGElement( dotDescription ) )
 } )
