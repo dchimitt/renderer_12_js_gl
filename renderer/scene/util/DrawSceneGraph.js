@@ -1,5 +1,3 @@
-import { instance } from "@viz-js/viz"
-
 /*
     TODO:  class description once i know how exactly this works
 */
@@ -19,10 +17,6 @@ export default class DrawSceneGraph {
     static visitedNodes = []
     static visitedNodeNames = []
     static nodeNumber
-
-    static draw( scene, fileName ) {
-
-    }
 
     static sceneToDot( scene ) {
         // eliminate identical duplicate edges

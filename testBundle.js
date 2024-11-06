@@ -1,3 +1,7 @@
+// TODO:  i think this should be in an import file somewhere
+import { instance } from "@viz-js/viz"
+import DrawSceneGraph from "./renderer/scene/util/DrawSceneGraph";
+
 const scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
 scene.getPosition(0).model = new renderer.Sphere();
@@ -30,4 +34,9 @@ function display()
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
+
+    let dotDescription = DrawSceneGraph.sceneToDot( scene )
+    instance().then( function( viz ) {
+        document.body.appendChild( viz.renderSVGElement( dotDescription ) )
+    } )
 }
