@@ -79,6 +79,9 @@ export default class DrawSceneGraph {
             result += this.positionToDot( positionReference, pNodeName )
         }
 
+        result += "}\n"
+
+        return result
     }
 
     static positionToDot( position, positionName ) {
