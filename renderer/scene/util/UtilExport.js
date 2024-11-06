@@ -21,3 +21,4 @@ export {check, checkPrimitives} from "./CheckModel.js";
 export {setColor, setRandomColor, setRandomVertexColor, setRainbowPrimitiveColors, setRandomPrimitiveColor, randomColor} from "./ModelShading.js";
 export {make} from "./PointCloud.js";
 export {format} from "./StringFormat.js";
+export { DrawSceneGraph } from "./DrawSceneGraph.js"
