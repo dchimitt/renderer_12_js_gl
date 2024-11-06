@@ -34,9 +34,9 @@ function display()
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
-
-    let dotDescription = DrawSceneGraph.sceneToDot( scene )
-    instance().then( function( viz ) {
-        document.body.appendChild( viz.renderSVGElement( dotDescription ) )
-    } )
 }
+
+let dotDescription = DrawSceneGraph.sceneToDot( scene )
+instance().then( function( viz ) {
+    document.body.appendChild( viz.renderSVGElement( dotDescription ) )
+} )
