@@ -76,7 +76,7 @@ export default class DrawSceneGraph {
             result += `${ pListNodeName } -> ${ pNodeName };\n`
 
             // this Position's matrix, model, and nested positions
-            result += positionToDot( positionReference, pNodeName )
+            result += this.positionToDot( positionReference, pNodeName )
         }
 
     }
@@ -124,7 +124,7 @@ export default class DrawSceneGraph {
             result += `${ positionName } -> ${ mNodeName };\n`
 
             // the model's vertex, color, and primitive lists
-            result += modelToDot( modelReference, mNodeName )
+            result += this.modelToDot( modelReference, mNodeName )
         } else { // this Model has already been visited
             let index = this.visitedNodes.indexOf( modelReference )
 
@@ -170,7 +170,7 @@ export default class DrawSceneGraph {
                     result += `${ nestedPositionListNodeName } -> ${ pNodeName };\n`
 
                     // the nested position's matrix, model, and nested positions
-                    result += positionToDot( positionReference, pNodeName )
+                    result += this.positionToDot( positionReference, pNodeName )
                 } else { // this Position has already been visited
                     let index = this.visitedNodes.indexOf( positionReference )
 
@@ -196,7 +196,7 @@ export default class DrawSceneGraph {
             result += tNodeName + " "
 
             if ( this.drawMatrixDetails ) {
-                result += `[label="Matrix:\n${ mode.getMatrix() }"];\n`
+                result += `[label="Matrix:\n${ model.getMatrix() }"];\n`
             } else {
                 result += `[label="Matrix"];\n`
             }
@@ -320,7 +320,7 @@ export default class DrawSceneGraph {
                     result += `${ nestedModelListNodeName } -> ${ mNodeName };\n`
 
                     // the nested model's matrix and nested models
-                    result += modelToDot( modelReference, mNodeName )
+                    result += this.modelToDot( modelReference, mNodeName )
                 } else {
                     let index = this.visitedNodes.indexOf( modelReference )
 
