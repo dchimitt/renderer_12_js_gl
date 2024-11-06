@@ -1,6 +1,3 @@
-// TODO:  i think this should be in an import file somewhere
-import { instance } from "@viz-js/viz"
-
 const scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
 scene.getPosition(0).model = new renderer.Sphere();
