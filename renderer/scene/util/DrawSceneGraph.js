@@ -105,7 +105,7 @@ export default class DrawSceneGraph {
         let modelReference = position.getModel()
 
         // check if the Model is being reused
-        let modelVisited = this.visitedNodes.find( modelReference ) !== undefined
+        let modelVisited = this.visitedNodes.includes( modelReference )
 
         if ( !modelVisited ) {
             // Model node name
@@ -151,7 +151,7 @@ export default class DrawSceneGraph {
                 let positionReference = position.getNestedPosition( i )
 
                 // check if the Position is being reused
-                let positionVisited = this.visitedNodes.find( positionReference ) !== undefined
+                let positionVisited = this.visitedNodes.includes( positionReference )
             
                 if ( !positionVisited ) {
                     // nested position node name
@@ -301,7 +301,7 @@ export default class DrawSceneGraph {
                 let modelReference = model.getNestedModel( i )
 
                 // check if the model is being reused
-                let modelVisited = this.visitedNodes.find( modelReference ) !== undefined
+                let modelVisited = this.visitedNodes.includes( modelReference )
 
                 if ( !modelVisited ) {
                     // nested model node name
