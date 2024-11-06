@@ -45,6 +45,12 @@ jobs:
         name: BundleCSS
         path: ${{ github.workspace }}/fileHTML.css
 
+    - name: Upload Graphviz
+      uses: actions/upload-artifact@v4
+      with:
+        name: BundleGraphviz
+        path: ${{ github.workspace }}/node_modules/@viz-js/viz/lib/viz-standalone.mjs
+
     - name: Upload Runner
       uses: actions/upload-artifact@v4
       with:
@@ -78,6 +84,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: BundleCSS
+        path: ${{ github.workspace }}/uptorepo/
+
+    - name: Get Graphviz
+      uses: actions/download-artifact@v4
+      with:
+        name: BundleGraphviz
         path: ${{ github.workspace }}/uptorepo/
 
     - name: Get Runner
