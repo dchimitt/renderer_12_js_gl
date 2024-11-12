@@ -1,3 +1,5 @@
+import * as Graphviz from "./viz-standalone.mjs"
+
 const scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
 scene.getPosition(0).model = new renderer.Sphere();
@@ -33,6 +35,6 @@ function display()
 }
 
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
-renderer.instance().then( function( viz ) {
+Graphviz.instance().then( function( viz ) {
     document.body.appendChild( viz.renderSVGElement( dotDescription ) )
 } )

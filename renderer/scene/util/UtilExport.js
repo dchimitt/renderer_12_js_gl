@@ -22,4 +22,3 @@ export {setColor, setRandomColor, setRandomVertexColor, setRainbowPrimitiveColor
 export {make} from "./PointCloud.js";
 export {format} from "./StringFormat.js";
 export { default as DrawSceneGraph } from "./DrawSceneGraph.js"
-export * from "@viz-js/viz"
