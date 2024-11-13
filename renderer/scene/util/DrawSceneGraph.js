@@ -226,7 +226,7 @@ export default class DrawSceneGraph {
 
                 // vertex node and label
                 result += vertexNodeName + " "
-                result += `[label="Vertex: ${ v }"];\n]`
+                result += `[label="Vertex: ${ v }"];\n`
 
                 // vertex edge
                 result += `${ lastVertexNodeName } -> ${ vertexNodeName };\n`
