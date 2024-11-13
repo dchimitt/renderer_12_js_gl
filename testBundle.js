@@ -11,7 +11,8 @@ setInterval(rotate, 1000/40);
 function rotate()
 {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
-    let x = Math.ceil( 30 * Math.sin( 0.0015 * Date.now() ) + 35 )
+    //let x = Math.ceil( 30 * Math.sin( 0.0015 * Date.now() ) + 35 )
+    let x = 6
     let col = scene.getPosition( 0 ).model.getColor()
     scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( x, x )
     renderer.setColor( scene.getPosition( 0 ).model, col )
@@ -34,6 +35,7 @@ function display()
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
 }
 
+renderer.DrawSceneGraph.drawVertexList = true
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
 Graphviz.instance().then( function( viz ) {
     document.body.appendChild( viz.renderSVGElement( dotDescription ) )
