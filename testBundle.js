@@ -37,6 +37,7 @@ function display()
 
 renderer.DrawSceneGraph.drawVertexList = true
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
+console.log( dotDescription )
 Graphviz.instance().then( function( viz ) {
     document.body.appendChild( viz.renderSVGElement( dotDescription ) )
 } )
