@@ -237,7 +237,7 @@ export default class DrawSceneGraph {
 
             // Array<Color> node and label
             let colorListNodeName = nodeName + "_colorList"
-            result += colorListNodeName = " "
+            result += colorListNodeName + " "
             result += `[label="Array<Color>"];\n`
 
             // Array<Color> edge
@@ -288,7 +288,7 @@ export default class DrawSceneGraph {
             }
         }
 
-        // recursively conver this model's nested models
+        // recursively convert this model's nested models
         // into a dot description
         if ( model.nestedModels.length !== 0 ) {
             // nested model list node and label
