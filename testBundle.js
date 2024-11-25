@@ -35,10 +35,10 @@ function display() {
 }
 
 // change viewport stuff
-const behaviorSelect = document.alignmentSelect.alignment
+const alignmentSelect = document.alignmentForm.alignment
 let prev = null
-for ( let i = 0; i < behaviorSelect.length; i++ ) {
-    behaviorSelect[ i ].addEventListener( "change", function() {
+for ( let i = 0; i < alignmentSelect.length; i++ ) {
+    alignmentSelect[ i ].addEventListener( "change", function() {
         ( prev ) ? prev = prev : null
 
         if ( this !== prev ) {
