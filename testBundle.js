@@ -35,12 +35,29 @@ function display() {
 }
 
 // change viewport stuff
+// maybe this could be somewhere else?
+
+// "enums"
+// top left, middle center, bottom right, &c.
+const VPALIGN = {
+    TL: 7, TC: 8, TR: 9,
+    ML: 4, MC: 5, MR: 6,
+    BL: 1, BC: 2, BR: 3
+}
+
+const VPMODE = {
+    DISTORT: 0,
+    LETTERBOX: 1,
+    LETTERBOXSCALE: 2,
+    CROP: 3,
+    CROPLETTERBOX: 4,
+    CROPSCALE: 5
+}
+
 const alignmentSelect = document.alignmentForm.alignment
 let prev = null
 for ( let i = 0; i < alignmentSelect.length; i++ ) {
     alignmentSelect[ i ].addEventListener( "change", function() {
-        ( prev ) ? prev = prev : null
-
         if ( this !== prev ) {
             prev = this
         }
