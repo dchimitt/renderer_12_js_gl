@@ -8,6 +8,9 @@ renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 // forward decl so we can modify this later
+const resizerEl = document.getElementById('resizer');
+const w = resizerEl.offsetWidth;
+const h = resizerEl.offsetHeight;
 const fb = new renderer.FrameBuffer(w, h);
 
 setInterval(rotate, 1000/40);
