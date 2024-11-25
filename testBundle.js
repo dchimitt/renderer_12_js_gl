@@ -7,6 +7,10 @@ scene.getPosition(0).model = new renderer.Sphere( 1, 6, 6 );
 renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
+// forward decl so we can modify this later
+// unfortunately it can't be const anymore
+let fb
+
 setInterval(rotate, 1000/40);
 
 function rotate() {
@@ -24,7 +28,7 @@ function display() {
     const w = resizerEl.offsetWidth;
     const h = resizerEl.offsetHeight;
 
-    const fb = new renderer.FrameBuffer(w, h);
+    fb = new renderer.FrameBuffer(w, h);
 
     renderer.render1(scene, fb.vp);
 
@@ -54,17 +58,29 @@ const VPMODE = {
     CROPSCALE: 5
 }
 
-const alignmentSelect = document.alignmentForm.alignment
-let prev = null
-for ( let i = 0; i < alignmentSelect.length; i++ ) {
-    alignmentSelect[ i ].addEventListener( "change", function() {
-        if ( this !== prev ) {
-            prev = this
+// alignment
+const alignmentRadios = document.alignmentForm.alignment
+let radPrev = null
+for ( let i = 0; i < alignmentRadios.length; i++ ) {
+    alignmentRadios[ i ].addEventListener( "change", function() {
+        if ( this !== radPrev ) {
+            radPrev = this
         }
 
-        console.log( this.value )
+        // TODO:  change based on this.value, mapped to VPALIGN
     } )
 }
+
+// behavior
+const behaviorSelect = document.getElementById( "behaviorDropDown" )
+let behPrev = null
+behaviorSelect.addEventListener( "change", function() {
+    if ( this != behPrev ) {
+        behPrev = this
+    }
+
+    console.log( this.value )
+} )
 
 // set property of graph drawer
 renderer.DrawSceneGraph.drawVertexList = true
