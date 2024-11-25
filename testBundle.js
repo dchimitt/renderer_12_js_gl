@@ -1,3 +1,4 @@
+// maybe this should be put somewhere else, but for now this works
 import * as Graphviz from "./viz-standalone.mjs"
 
 const scene = new renderer.Scene();
@@ -8,8 +9,7 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 setInterval(rotate, 1000/40);
 
-function rotate()
-{
+function rotate() {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
     //let x = Math.ceil( 30 * Math.sin( 0.0015 * Date.now() ) + 35 )
     //let x = 4
@@ -19,8 +19,7 @@ function rotate()
     display();
 }
 
-function display()
-{
+function display() {
     const resizerEl = document.getElementById('resizer');
     const w = resizerEl.offsetWidth;
     const h = resizerEl.offsetHeight;
@@ -35,9 +34,12 @@ function display()
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
 }
 
+// set property of graph drawer
 renderer.DrawSceneGraph.drawVertexList = true
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
-console.log( dotDescription )
+// this only runs once the page is loaded,
+// and is given an id so it can be deleted/updated later
 Graphviz.instance().then( function( viz ) {
-    document.body.appendChild( viz.renderSVGElement( dotDescription ) )
+    let graph = document.body.appendChild( viz.renderSVGElement( dotDescription ) )
+    graph.id = "sceneGraph"
 } )

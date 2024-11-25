@@ -1,14 +1,24 @@
 /*
-    TODO:  class description once i know how exactly this works
+ * Renderer 10. The MIT License.
+ * Copyright (c) 2022 rlkraft@pnw.edu
+ * See LICENSE for details.
 */
 
 /*
-TODO:  make these proper JSDocs
+    This class converts a {@link Scene} data structure into
+    a DOT desciption of the scene.  The DOT description is
+    returned by {@code sceneToDot} for processing or saving
+    however you wish.  In our case, this is processed by
+    VisJS and displayed on the web page.
+<p>
+    This class has four static boolean variables that can be used
+    to control the complexity of the scene graph drawing.
 */
 
 export default class DrawSceneGraph {
 
     // you can do this in newer JS,
+    // but they must be referenced through "this"
     static drawCameraDetails = true
     static drawMatrix = true
     static drawMatrixDetails = true
