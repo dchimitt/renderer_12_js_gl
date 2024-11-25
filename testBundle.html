@@ -11,7 +11,18 @@
         </div>
 
         <form><fieldset>
-            <legend>Viewport Alignment</legend>
+            <legend>Viewport Settings</legend>
+            <label for="behaviorDropDown">Behavior:</label>
+            <select name="behavior" id="behaviorDropDown">
+                <option value="distort" selected>Distort</option>
+                <option value="letterbox">Letterbox</option>
+                <option value="letterboxScale">Letterbox & Scale</option>
+                <option value="crop">Crop</option>
+                <option value="cropLetterbox">Crop & Letterbox</option>
+                <option value="cropScale">Crop & Scale</option>
+            </select> 
+
+            <label for="radioContainer">Alignment:</label>
             <div id="radioContainer">
                 <!-- Not implemented -->
                 <!-- Idea:  "value" -> ten-keypad to quickly change -->
