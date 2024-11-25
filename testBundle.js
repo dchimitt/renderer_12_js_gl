@@ -8,10 +8,8 @@ renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 // forward decl so we can modify this later
-const resizerEl = document.getElementById('resizer');
-const w = resizerEl.offsetWidth;
-const h = resizerEl.offsetHeight;
-const fb = new renderer.FrameBuffer(w, h);
+// unfortunately it can't be const anymore
+let fb
 
 setInterval(rotate, 1000/40);
 
@@ -22,6 +20,7 @@ function rotate() {
     //let col = scene.getPosition( 0 ).model.getColor()
     //scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( x, x )
     //renderer.setColor( scene.getPosition( 0 ).model, col )
+
     display();
 }
 
@@ -30,12 +29,20 @@ function display() {
     const w = resizerEl.offsetWidth;
     const h = resizerEl.offsetHeight;
 
+    fb = new renderer.FrameBuffer(w, h);
+
     renderer.render1(scene, fb.vp);
 
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
+    /*
+    Uncaught DOMException: Index or size is negative or greater than the allowed amount
+    display https://ejvogt5.github.io/renderer_12_js/testBundle.js:38
+    rotate https://ejvogt5.github.io/renderer_12_js/testBundle.js:25
+    setInterval handler* https://ejvogt5.github.io/renderer_12_js/testBundle.js:16
+    */
 }
 
 // change viewport stuff
@@ -81,7 +88,6 @@ function setupViewer() {
                     break
                 case VPALIGN.BR:
                     fb.setViewport( wFB - dVP, hFB - dVP, dVP, dVP )
-                    break
             }
 
             break
