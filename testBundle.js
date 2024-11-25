@@ -34,6 +34,21 @@ function display() {
     ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
 }
 
+// change viewport stuff
+const behaviorSelect = document.alignmentSelect.alignment
+let prev = null
+for ( let i = 0; i < behaviorSelect.length; i++ ) {
+    behaviorSelect[ i ].addEventListener( "change", function() {
+        ( prev ) ? prev = prev : null
+
+        if ( this !== prev ) {
+            prev = this
+        }
+
+        console.log( this.value )
+    } )
+}
+
 // set property of graph drawer
 renderer.DrawSceneGraph.drawVertexList = true
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )

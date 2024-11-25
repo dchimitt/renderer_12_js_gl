@@ -10,7 +10,7 @@
             <canvas id = "pixels"></canvas>
         </div>
 
-        <form><fieldset>
+        <fieldset>
             <legend>Viewport Settings</legend>
             <label for="behaviorDropDown">Behavior:</label>
             <!-- Not implemented -->
@@ -24,28 +24,30 @@
             </select> 
 
             <br><br>
-            
-            <label for="TLradio">Alignment:</label>
-            <div id="radioContainer">
-                <!-- Not implemented -->
-                <!-- Idea:  "value" -> ten-keypad to quickly change -->
-                <div>
-                    <input type="radio" id="TLradio" name="alignment" value="7" checked/>
-                    <input type="radio" id="TCradio" name="alignment" value="8"/>
-                    <input type="radio" id="TRradio" name="alignment" value="9"/>
+
+            <form name="alignmentForm">
+                <label for="TLradio">Alignment:</label>
+                <div id="radioContainer">
+                    <!-- Not implemented -->
+                    <!-- Idea:  "value" -> ten-keypad to quickly change -->
+                    <div>
+                        <input type="radio" id="TLradio" name="alignment" value="7" checked/>
+                        <input type="radio" id="TCradio" name="alignment" value="8"/>
+                        <input type="radio" id="TRradio" name="alignment" value="9"/>
+                    </div>
+                    <div>
+                        <input type="radio" id="MLradio" name="alignment" value="4"/>
+                        <input type="radio" id="MCradio" name="alignment" value="5"/>
+                        <input type="radio" id="MRradio" name="alignment" value="6"/>
+                    </div>
+                    <div>
+                        <input type="radio" id="BLradio" name="alignment" value="1"/>
+                        <input type="radio" id="BCradio" name="alignment" value="2"/>
+                        <input type="radio" id="BRradio" name="alignment" value="3"/>
+                    </div>
                 </div>
-                <div>
-                    <input type="radio" id="MLradio" name="alignment" value="4"/>
-                    <input type="radio" id="MCradio" name="alignment" value="5"/>
-                    <input type="radio" id="MRradio" name="alignment" value="6"/>
-                </div>
-                <div>
-                    <input type="radio" id="BLradio" name="alignment" value="1"/>
-                    <input type="radio" id="BCradio" name="alignment" value="2"/>
-                    <input type="radio" id="BRradio" name="alignment" value="3"/>
-                </div>
-            </div>
-        </fieldset></form>
+            </form>
+        </fieldset>
         
         <script src = "rendererBundle.js" type = "module"></script>
         <script src = "testBundle.js", type = "module"></script>
