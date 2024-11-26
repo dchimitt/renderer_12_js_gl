@@ -35,13 +35,14 @@ function display() {
 
     fb = new renderer.FrameBuffer(w, h);
 
-    renderer.render1(scene, fb.vp);
+    fb.setViewport( xVP, yVP, dVP )
+    renderer.render1( scene, fb.vp );
 
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     console.log( fb.pixelBuffer.length )
-    ctx.putImageData( new ImageData( fb.pixelBuffer, dVP, dVP ), xVP, yVP );
+    ctx.putImageData( new ImageData( fb.pixelBuffer ), 0, 0 );
     /*
     Uncaught DOMException: Index or size is negative or greater than the allowed amount
     display https://ejvogt5.github.io/renderer_12_js/testBundle.js:38
