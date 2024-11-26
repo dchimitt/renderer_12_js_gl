@@ -35,7 +35,7 @@ function display() {
 
     fb = new renderer.FrameBuffer( w, h );
 
-    fb.setViewport( xVP, yVP, dVP )
+    fb.setViewport( dVP, dVP, xVP, yVP )
     renderer.render1( scene, fb.vp );
 
     const ctx = document.getElementById("pixels").getContext("2d");
