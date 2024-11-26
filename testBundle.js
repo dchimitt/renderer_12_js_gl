@@ -9,7 +9,7 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 // forward decl so we can modify this later
 // unfortunately it can't be const anymore
-var fb // TODO: change me back
+let fb
 
 let dVP = 800
 let xVP = 0
@@ -40,6 +40,7 @@ function display() {
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
+    console.log( fb.pixelBuffer.length )
     ctx.putImageData( new ImageData( fb.pixelBuffer, dVP, dVP ), xVP, yVP );
     /*
     Uncaught DOMException: Index or size is negative or greater than the allowed amount
