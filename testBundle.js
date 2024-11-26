@@ -9,7 +9,7 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 // forward decl so we can modify this later
 // unfortunately it can't be const anymore
-let fb
+var fb // TODO: change me back
 
 let dVP = 800
 let xVP = 0
