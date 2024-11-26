@@ -11,6 +11,10 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 // unfortunately it can't be const anymore
 let fb
 
+let dVP = 800
+let xVP = 0
+let yVP = 0
+
 setInterval(rotate, 1000/40);
 
 function rotate() {
@@ -36,7 +40,7 @@ function display() {
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
-    ctx.putImageData(new ImageData(fb.pixelBuffer, w, h), 0, 0);
+    ctx.putImageData( new ImageData( fb.pixelBuffer, dVP, dVP ), xVP, yVP );
     /*
     Uncaught DOMException: Index or size is negative or greater than the allowed amount
     display https://ejvogt5.github.io/renderer_12_js/testBundle.js:38
@@ -63,31 +67,50 @@ function setupViewer() {
 
             switch ( currAlign ) {
                 case VPALIGN.TL:
-                    fb.setViewport( 0, 0, dVP, dVP )
+                    xVP = 0; yVP = 0
+
+                    //fb.setViewport( 0, 0, dVP, dVP )
                     break
                 case VPALIGN.TC:
-                    fb.setViewport( hOffset, 0, dVP, dVP )
+                    xVP = hOffset; yVP = 0
+                
+                    //fb.setViewport( hOffset, 0, dVP, dVP )
                     break
                 case VPALIGN.TR:
-                    fb.setViewport( wFB - dVP, 0, dVP, dVP )
+                    xVP = wFB - dVP; yVP = 0
+                
+                    //fb.setViewport( wFB - dVP, 0, dVP, dVP )
                     break
                 case VPALIGN.ML:
-                    fb.setViewport( 0, vOffset, dVP, dVP )
+                    xVP = 0; yVP = vOffset
+                
+                    //fb.setViewport( 0, vOffset, dVP, dVP )
                     break
                 case VPALIGN.MC:
-                    fb.setViewport( hOffset, vOffset, dVP, dVP )
+                    xVP = hOffset; yVP = vOffset
+                
+                    //fb.setViewport( hOffset, vOffset, dVP, dVP )
                     break
                 case VPALIGN.MR:
-                    fb.setViewport( wFB - dVP, vOffset, dVP, dVP )
+                    xVP = wFB - dVP; yVP = vOffset
+                
+                    //fb.setViewport( wFB - dVP, vOffset, dVP, dVP )
                     break
                 case VPALIGN.BL:
-                    fb.setViewport( 0, hFB - dVP, dVP, dVP )
+                    xVP = 0; yVP = hFB = dVP
+                
+                    //fb.setViewport( 0, hFB - dVP, dVP, dVP )
                     break
                 case VPALIGN.BC:
-                    fb.setViewport( hOffset, hFB - dVP, dVP, dVP )
+                    xVP = hOffset; yVP = hFB - dVP
+                
+                    //fb.setViewport( hOffset, hFB - dVP, dVP, dVP )
                     break
                 case VPALIGN.BR:
-                    fb.setViewport( wFB - dVP, hFB - dVP, dVP, dVP )
+                    xVP = wFB - dVP; yVP = hFB - dVP
+                
+                    //fb.setViewport( wFB - dVP, hFB - dVP, dVP, dVP )
+                    break
             }
 
             break
