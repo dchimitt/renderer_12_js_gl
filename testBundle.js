@@ -7,11 +7,27 @@ scene.getPosition(0).model = new renderer.Sphere( 1, 6, 6 );
 renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
-// forward decl so we can modify this later
+// use new ResizeObserver to limit minimum size
+// https://stackoverflow.com/a/39312522
+// 96.94% browser support https://caniuse.com/resizeobserver
+// better than CSS resize which is only 83.12%!
+const resizerEl = document.getElementById( "resizer" )
+const DEFAULT_SIZE = resizerEl.offsetWidth // generated as square
+
+function clampDivSize() {
+    resizerEl.style.width  = Math.max( DEFAULT_SIZE, resizerEl.offsetWidth ) + "px"
+    resizerEl.style.height = Math.max( DEFAULT_SIZE, resizerEl.offsetHeight ) + "px"
+}
+clampDivSize()
+
+new ResizeObserver( clampDivSize ).observe( resizerEl )
+
+// forward decl so we can access this later
 // unfortunately it can't be const anymore
 let fb
 
-let dVP = 800
+let wVP = DEFAULT_SIZE
+let hVP = DEFAULT_SIZE
 let xVP = 0
 let yVP = 0
 
@@ -29,93 +45,20 @@ function rotate() {
 }
 
 function display() {
-    const resizerEl = document.getElementById('resizer');
     const w = resizerEl.offsetWidth;
     const h = resizerEl.offsetHeight;
 
-    fb = new renderer.FrameBuffer( w, h );
+    fb = new renderer.FrameBuffer( w, h, renderer.Color.GRAY );
 
-    fb.setViewport( dVP, dVP, xVP, yVP )
+    setupViewer()
+
+    fb.setViewport( wVP, hVP, xVP, yVP, renderer.Color.BLACK )
     renderer.render1( scene, fb.vp );
 
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     ctx.putImageData( new ImageData( fb.pixelBuffer, w, h ), 0, 0 );
-    /*
-    Uncaught DOMException: Index or size is negative or greater than the allowed amount
-    display https://ejvogt5.github.io/renderer_12_js/testBundle.js:38
-    rotate https://ejvogt5.github.io/renderer_12_js/testBundle.js:25
-    setInterval handler* https://ejvogt5.github.io/renderer_12_js/testBundle.js:16
-    */
-}
-
-// change viewport stuff
-// maybe this could be somewhere else?
-function setupViewer() {
-    switch ( currMode ) {
-        case VPMODE.DISTORT:
-            // do nothing
-            break
-        case VPMODE.LETTERBOX:
-            const wFB = fb.width
-            const hFB = fb.height
-
-            const dVP = 800 // TODO check me
-
-            const hOffset = ( wFB - dVP ) / 2
-            const vOffset = ( hFB - dVP ) / 2
-
-            switch ( currAlign ) {
-                case VPALIGN.TL:
-                    xVP = 0; yVP = 0
-
-                    //fb.setViewport( 0, 0, dVP, dVP )
-                    break
-                case VPALIGN.TC:
-                    xVP = hOffset; yVP = 0
-                
-                    //fb.setViewport( hOffset, 0, dVP, dVP )
-                    break
-                case VPALIGN.TR:
-                    xVP = wFB - dVP; yVP = 0
-                
-                    //fb.setViewport( wFB - dVP, 0, dVP, dVP )
-                    break
-                case VPALIGN.ML:
-                    xVP = 0; yVP = vOffset
-                
-                    //fb.setViewport( 0, vOffset, dVP, dVP )
-                    break
-                case VPALIGN.MC:
-                    xVP = hOffset; yVP = vOffset
-                
-                    //fb.setViewport( hOffset, vOffset, dVP, dVP )
-                    break
-                case VPALIGN.MR:
-                    xVP = wFB - dVP; yVP = vOffset
-                
-                    //fb.setViewport( wFB - dVP, vOffset, dVP, dVP )
-                    break
-                case VPALIGN.BL:
-                    xVP = 0; yVP = hFB = dVP
-                
-                    //fb.setViewport( 0, hFB - dVP, dVP, dVP )
-                    break
-                case VPALIGN.BC:
-                    xVP = hOffset; yVP = hFB - dVP
-                
-                    //fb.setViewport( hOffset, hFB - dVP, dVP, dVP )
-                    break
-                case VPALIGN.BR:
-                    xVP = wFB - dVP; yVP = hFB - dVP
-                
-                    //fb.setViewport( wFB - dVP, hFB - dVP, dVP, dVP )
-                    break
-            }
-
-            break
-    }
 }
 
 // "enums"
@@ -139,6 +82,95 @@ const VPMODE = {
 let currAlign = VPALIGN.TL
 let currMode = VPMODE.DISTORT
 
+// change viewport stuff
+// maybe this could be somewhere else?
+function setupViewer() {
+    switch ( currMode ) {
+        case VPMODE.DISTORT: {
+            xVP = 0
+            yVP = 0
+
+            wVP = fb.width
+            hVP = fb.height
+            break
+        }
+        case VPMODE.LETTERBOX: {
+            const wFB = fb.width
+            const hFB = fb.height
+
+            const dVP = DEFAULT_SIZE
+
+            const hOffset = ( wFB - dVP ) / 2
+            const vOffset = ( hFB - dVP ) / 2
+
+            wVP = dVP
+            hVP = dVP
+
+            switch ( currAlign ) {
+                case VPALIGN.TL: {
+                    xVP = 0
+                    yVP = 0
+                    
+                    break
+                }
+                case VPALIGN.TC: {
+                    xVP = hOffset
+                    yVP = 0
+                
+                    break
+                }
+                case VPALIGN.TR: {
+                    xVP = wFB - dVP
+                    yVP = 0
+                
+                    break
+                }
+                case VPALIGN.ML: {
+                    xVP = 0
+                    yVP = vOffset
+                
+                    break
+                }
+                case VPALIGN.MC: {
+                    xVP = hOffset
+                    yVP = vOffset
+                
+                    break
+                }
+                case VPALIGN.MR: {
+                    xVP = wFB - dVP
+                    yVP = vOffset
+                
+                    break
+                }
+                case VPALIGN.BL: {
+                    xVP = 0
+                    yVP = hFB - dVP
+                
+                    break
+                }
+                case VPALIGN.BC: {
+                    xVP = hOffset
+                    yVP = hFB - dVP
+                
+                    break
+                }
+                case VPALIGN.BR: {
+                    xVP = wFB - dVP
+                    yVP = hFB - dVP
+                
+                    break
+                }
+            }
+
+            break
+        }
+        default: {
+            console.log( "No match found!" )
+        }
+    }
+}
+
 // alignment
 const alignmentRadios = document.alignmentForm.alignment
 let radPrev = null
@@ -148,9 +180,8 @@ for ( let i = 0; i < alignmentRadios.length; i++ ) {
             radPrev = this
         }
 
-        currAlign = this.value
+        currAlign = Number( this.value )
         setupViewer()
-        // TODO:  change based on this.value, mapped to VPALIGN, fb.vp
     } )
 }
 
@@ -162,9 +193,8 @@ behaviorSelect.addEventListener( "change", function() {
         behPrev = this
     }
 
-    currMode = this.value
+    currMode = Number( this.value )
     setupViewer()
-    // TODO:  change based on this.value, mapped to VPMODE, fb.vp
 } )
 
 // set property of graph drawer
@@ -172,6 +202,8 @@ renderer.DrawSceneGraph.drawVertexList = true
 let dotDescription = renderer.DrawSceneGraph.sceneToDot( scene )
 // this only runs once the page is loaded,
 // and is given an id so it can be deleted/updated later
+// NOTE:  changing the width of this element causes the graph to draw under a huge margin
+// i think this is because the function generates the graph at a ~5000 px offset for some reason
 Graphviz.instance().then( function( viz ) {
     let graph = document.body.appendChild( viz.renderSVGElement( dotDescription ) )
     graph.id = "sceneGraph"
