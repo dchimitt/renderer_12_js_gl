@@ -1,12 +1,32 @@
 // maybe this should be put somewhere else, but for now this works
 import * as Graphviz from "./viz-standalone.mjs"
 
-const scene = new renderer.Scene();
+// "enums"
+// top left, middle center, bottom right, &c.
+// this is based on a full keyboard's ten-key keypad
+const VPALIGN = {
+    TL: 7, TC: 8, TR: 9,
+    ML: 4, MC: 5, MR: 6,
+    BL: 1, BC: 2, BR: 3
+}
+
+const VPMODE = {
+    DISTORT: 0,
+    LETTERBOX: 1,
+    LETTERBOXSCALE: 2,
+    CROP: 3,
+    CROPLETTERBOX: 4,
+    CROPSCALE: 5
+}
+
+let scene = new renderer.Scene();
 scene.addPosition(new renderer.Position());
 scene.getPosition(0).model = new renderer.Sphere( 1, 6, 6 );
 renderer.setColor(scene.getPosition(0).model, renderer.Color.red);
 scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
+let currAlign = VPALIGN.TL
+let currMode = VPMODE.DISTORT
 // use new ResizeObserver to limit minimum size
 // https://stackoverflow.com/a/39312522
 // 96.94% browser support https://caniuse.com/resizeobserver
@@ -15,8 +35,10 @@ const resizerEl = document.getElementById( "resizer" )
 const DEFAULT_SIZE = resizerEl.offsetWidth // generated as square
 
 function clampDivSize() {
-    resizerEl.style.width  = Math.max( DEFAULT_SIZE, resizerEl.offsetWidth ) + "px"
-    resizerEl.style.height = Math.max( DEFAULT_SIZE, resizerEl.offsetHeight ) + "px"
+    if ( currMode < 3 ) {
+        resizerEl.style.width  = Math.max( DEFAULT_SIZE, resizerEl.offsetWidth ) + "px"
+        resizerEl.style.height = Math.max( DEFAULT_SIZE, resizerEl.offsetHeight ) + "px"
+    }
 }
 clampDivSize()
 
@@ -25,11 +47,6 @@ new ResizeObserver( clampDivSize ).observe( resizerEl )
 // forward decl so we can access this later
 // unfortunately it can't be const anymore
 let fb
-
-let wVP = DEFAULT_SIZE
-let hVP = DEFAULT_SIZE
-let xVP = 0
-let yVP = 0
 
 setInterval(rotate, 1000/40);
 
@@ -51,8 +68,6 @@ function display() {
     fb = new renderer.FrameBuffer( w, h, renderer.Color.GRAY );
 
     setupViewer()
-
-    fb.setViewport( wVP, hVP, xVP, yVP, renderer.Color.BLACK )
     renderer.render1( scene, fb.vp );
 
     const ctx = document.getElementById("pixels").getContext("2d");
@@ -61,37 +76,12 @@ function display() {
     ctx.putImageData( new ImageData( fb.pixelBuffer, w, h ), 0, 0 );
 }
 
-// "enums"
-// top left, middle center, bottom right, &c.
-// this is based on a full keyboard's ten-key keypad
-const VPALIGN = {
-    TL: 7, TC: 8, TR: 9,
-    ML: 4, MC: 5, MR: 6,
-    BL: 1, BC: 2, BR: 3
-}
-
-const VPMODE = {
-    DISTORT: 0,
-    LETTERBOX: 1,
-    LETTERBOXSCALE: 2,
-    CROP: 3,
-    CROPLETTERBOX: 4,
-    CROPSCALE: 5
-}
-
-let currAlign = VPALIGN.TL
-let currMode = VPMODE.DISTORT
-
 // change viewport stuff
 // maybe this could be somewhere else?
 function setupViewer() {
     switch ( currMode ) {
         case VPMODE.DISTORT: {
-            xVP = 0
-            yVP = 0
-
-            wVP = fb.width
-            hVP = fb.height
+            fb.setViewport( fb.width, fb.height, 0, 0, renderer.Color.BLACK )
             break
         }
         case VPMODE.LETTERBOX: {
@@ -103,62 +93,134 @@ function setupViewer() {
             const hOffset = ( wFB - dVP ) / 2
             const vOffset = ( hFB - dVP ) / 2
 
-            wVP = dVP
-            hVP = dVP
-
             switch ( currAlign ) {
                 case VPALIGN.TL: {
-                    xVP = 0
-                    yVP = 0
+                    fb.setViewport( dVP, dVP, 0, 0, renderer.Color.BLACK )
                     
                     break
                 }
                 case VPALIGN.TC: {
-                    xVP = hOffset
-                    yVP = 0
+                    fb.setViewport( dVP, dVP, hOffset, 0, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.TR: {
-                    xVP = wFB - dVP
-                    yVP = 0
+                    fb.setViewport( dVP, dVP, wFB - dVP, 0, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.ML: {
-                    xVP = 0
-                    yVP = vOffset
+                    fb.setViewport( dVP, dVP, 0, vOffset, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.MC: {
-                    xVP = hOffset
-                    yVP = vOffset
+                    fb.setViewport( dVP, dVP, hOffset, vOffset, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.MR: {
-                    xVP = wFB - dVP
-                    yVP = vOffset
+                    fb.setViewport( dVP, dVP, wFB - dVP, vOffset, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.BL: {
-                    xVP = 0
-                    yVP = hFB - dVP
+                    fb.setViewport( dVP, dVP, 0, hFB - dVP, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.BC: {
-                    xVP = hOffset
-                    yVP = hFB - dVP
+                    fb.setViewport( dVP, dVP, hOffset, hFB - dVP, renderer.Color.BLACK )
                 
                     break
                 }
                 case VPALIGN.BR: {
-                    xVP = wFB - dVP
-                    yVP = hFB - dVP
+                    fb.setViewport( dVP, dVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
                 
+                    break
+                }
+            }
+
+            break
+        }
+        case VPMODE.LETTERBOXSCALE: {
+            const wFB = fb.width
+            const hFB = fb.height
+
+            const dVP = Math.min( wFB, hFB )
+
+            const hOffset = ( hFB < wFB ) ? ( wFB - hFB ) / 2 : 0
+            const vOffset = ( wFB < hFB ) ? ( hFB - wFB ) / 2 : 0
+
+            switch ( currAlign ) {
+                case VPALIGN.TL: {
+                    fb.setViewport( dVP, dVP, 0, 0, renderer.Color.BLACK )
+                    
+                    break
+                }
+                case VPALIGN.TC: {
+                    fb.setViewport( dVP, dVP, hOffset, 0, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.TR: {
+                    fb.setViewport( dVP, dVP, wFB - dVP, 0, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.ML: {
+                    fb.setViewport( dVP, dVP, 0, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.MC: {
+                    fb.setViewport( dVP, dVP, hOffset, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.MR: {
+                    fb.setViewport( dVP, dVP, wFB - dVP, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BL: {
+                    fb.setViewport( dVP, dVP, 0, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BC: {
+                    fb.setViewport( dVP, dVP, hOffset, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BR: {
+                    fb.setViewport( dVP, dVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+            }
+
+            break
+        }
+        case VPMODE.CROP: {
+            const wFB = fb.width
+            const hFB = fb.height
+
+            const wVP = ( wFB < DEFAULT_SIZE ) ? wFB : DEFAULT_SIZE
+            const hVP = ( hFB < DEFAULT_SIZE ) ? hFB : DEFAULT_SIZE
+
+            switch ( currAlign ) {
+                case VPALIGN.TL: {
+                    fb.setViewport( wVP, hVP, 0, 0, renderer.Color.BLACK )
+                    //scene = scene.changeCamera( 
+                        scene.getCamera().projPerspective(
+                            -1,
+                            -1 + ( 2.0 * wVP ) / DEFAULT_SIZE,
+                             1 - ( 2.0 * hVP ) / DEFAULT_SIZE,
+                             1
+                        )
+                    //)
+
                     break
                 }
             }
