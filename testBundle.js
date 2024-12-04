@@ -27,6 +27,7 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 
 let currAlign = VPALIGN.TL
 let currMode = VPMODE.DISTORT
+let currCrop = VPALIGN.TL
 // use new ResizeObserver to limit minimum size
 // https://stackoverflow.com/a/39312522
 // 96.94% browser support https://caniuse.com/resizeobserver
@@ -82,6 +83,7 @@ function setupViewer() {
     switch ( currMode ) {
         case VPMODE.DISTORT: {
             fb.setViewport( fb.width, fb.height, 0, 0, renderer.Color.BLACK )
+            scene.getCamera().projPerspective()
             break
         }
         case VPMODE.LETTERBOX: {
@@ -141,6 +143,8 @@ function setupViewer() {
                 }
             }
 
+            scene.getCamera().projPerspective()
+
             break
         }
         case VPMODE.LETTERBOXSCALE: {
@@ -199,6 +203,8 @@ function setupViewer() {
                     break
                 }
             }
+            
+            scene.getCamera().projPerspective()
 
             break
         }
@@ -212,20 +218,365 @@ function setupViewer() {
             switch ( currAlign ) {
                 case VPALIGN.TL: {
                     fb.setViewport( wVP, hVP, 0, 0, renderer.Color.BLACK )
-                    //scene = scene.changeCamera( 
-                        scene.getCamera().projPerspective(
-                            -1,
-                            -1 + ( 2.0 * wVP ) / DEFAULT_SIZE,
-                             1 - ( 2.0 * hVP ) / DEFAULT_SIZE,
-                             1
-                        )
-                    //)
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + ( 2 * wVP ) / DEFAULT_SIZE,
+                         1 - ( 2 * hVP ) / DEFAULT_SIZE,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.TC: {
+                    fb.setViewport( wVP, hVP, ( wFB - wVP ) / 2, 0, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                        -wVP / DEFAULT_SIZE,
+                         wVP / DEFAULT_SIZE,
+                         1 - ( 2 * hVP ) / DEFAULT_SIZE,
+                         1
+                    )
+                
+                    break
+                }
+                case VPALIGN.TR: {
+                    fb.setViewport( wVP, hVP, wFB - wVP, 0, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                         1 - ( 2 * wVP ) / DEFAULT_SIZE,
+                         1,
+                         1 - ( 2 * hVP ) / DEFAULT_SIZE,
+                         1
+                    )
+                
+                    break
+                }
+                case VPALIGN.ML: {
+                    fb.setViewport( wVP, hVP, 0, ( hFB - hVP ) / 2, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + ( 2 * wVP ) / DEFAULT_SIZE,
+                        -hVP / DEFAULT_SIZE,
+                         hVP / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+                case VPALIGN.MC: {
+                    fb.setViewport( wVP, hVP, ( wFB - wVP ) / 2, ( hFB - hVP ) / 2, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                        -wVP / DEFAULT_SIZE,
+                         wVP / DEFAULT_SIZE,
+                        -hVP / DEFAULT_SIZE,
+                         hVP / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+                case VPALIGN.MR: {
+                    fb.setViewport( wVP, hVP, wFB - wVP, ( hFB - hVP ) / 2, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                         1 - ( 2 * wVP ) / DEFAULT_SIZE,
+                         1,
+                        -hVP / DEFAULT_SIZE,
+                         hVP / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+                case VPALIGN.BL: {
+                    fb.setViewport( wVP, hVP, 0, hFB - hVP, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + ( 2 * wVP ) / DEFAULT_SIZE,
+                        -1,
+                        -1 + (2  * hVP ) / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+                case VPALIGN.BC: {
+                    fb.setViewport( wVP, hVP, ( wFB - wVP ) / 2, hFB - hVP, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                        -wVP / DEFAULT_SIZE,
+                         wVP / DEFAULT_SIZE,
+                        -1,
+                        -1 + ( 2 * hVP ) / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+                case VPALIGN.BR: {
+                    fb.setViewport( wVP, hVP, wFB - wVP, hFB - hVP, renderer.Color.BLACK )
+                    scene.getCamera().projPerspective(
+                         1 - ( 2 * wVP ) / DEFAULT_SIZE,
+                         1,
+                        -1,
+                        -1 + ( 2 * hVP ) / DEFAULT_SIZE
+                    )
+                
+                    break
+                }
+            }
+
+            break
+        }
+        case VPMODE.CROPLETTERBOX: {
+            const wFB = fb.width
+            const hFB = fb.height
+
+            const wVP = Math.min( DEFAULT_SIZE, wFB )
+            const hVP = Math.min( DEFAULT_SIZE, hFB )
+
+            const hOffset = ( wVP < wFB ) ? ( wFB - wVP ) / 2 : 0
+            const vOffset = ( hVP < hFB ) ? ( hFB - hVP ) / 2 : 0
+
+            const w = wVP < DEFAULT_SIZE ? 2 * ( wVP / DEFAULT_SIZE ) : 2
+            const h = hVP < DEFAULT_SIZE ? 2 * ( hVP / DEFAULT_SIZE ) : 2
+
+            switch ( currAlign ) {
+                case VPALIGN.TL: {
+                    fb.setViewport( wVP, hVP, 0, 0, renderer.Color.BLACK )
+                    
+                    break
+                }
+                case VPALIGN.TC: {
+                    fb.setViewport( wVP, hVP, hOffset, 0, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.TR: {
+                    fb.setViewport( wVP, hVP, wFB - dVP, 0, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.ML: {
+                    fb.setViewport( wVP, hVP, 0, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.MC: {
+                    fb.setViewport( wVP, hVP, hOffset, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.MR: {
+                    fb.setViewport( wVP, hVP, wFB - dVP, vOffset, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BL: {
+                    fb.setViewport( wVP, hVP, 0, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BC: {
+                    fb.setViewport( wVP, hVP, hOffset, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+                case VPALIGN.BR: {
+                    fb.setViewport( wVP, hVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
+                
+                    break
+                }
+            }
+
+            switch ( currCrop ) {
+                case VPALIGN.TL: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + w,
+                         1 - h,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.TC: {
+                    scene.getCamera().projPerspective(
+                        -w / 2,
+                         w / 2,
+                         1 - h,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.TR: {
+                    scene.getCamera().projPerspective(
+                         1 - w,
+                         1,
+                         1 - h,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.ML: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + w,
+                        -h / 2,
+                         h / 2
+                    )
+
+                    break
+                }
+                case VPALIGN.MC: {
+                    scene.getCamera().projPerspective(
+                        -w / 2,
+                         w / 2,
+                        -h / 2,
+                         h / 2
+                    )
+
+                    break
+                }
+                case VPALIGN.MR: {
+                    scene.getCamera().projPerspective(
+                         1 - w,
+                         1,
+                        -h / 2,
+                         h / 2
+                    )
+
+                    break
+                }
+                case VPALIGN.BL: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        -1 + w,
+                        -1,
+                        -1 + h
+                    )
+
+                    break
+                }
+                case VPALIGN.BC: {
+                    scene.getCamera().projPerspective(
+                        -w / 2,
+                         w / 2,
+                        -1,
+                        -1 + h
+                    )
+
+                    break
+                }
+                case VPALIGN.BR: {
+                    scene.getCamera().projPerspective(
+                         1 - w,
+                         1,
+                        -1,
+                        -1 + h
+                    )
 
                     break
                 }
             }
 
             break
+        }
+        case VPMODE.CROPSCALE: {
+            const wFB = fb.width
+            const hFB = fb.height
+
+            const wVP = wFB
+            const hVP = hFB
+            fb.setViewport( wVP, hVP, 0, 0, renderer.Color.BLACK )
+
+            const r = wVP / hVP
+
+            switch ( currAlign ) {
+                case VPALIGN.TL: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        ( r >= 1 ) ? 1 : 2 * r - 1,
+                        ( r >= 1 ) ? 1 - 2 / r : -1,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.TC: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : -r,
+                        ( r >= 1 ) ? 1 : r,
+                        ( r >= 1 ) ? 1 - 2 / r : -1,
+                        1
+                    )
+
+                    break
+                }
+                case VPALIGN.TR: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : 1 - 2 * r,
+                         1,
+                        ( r >= 1 ) ? 1 - 2 / r : -1,
+                         1
+                    )
+
+                    break
+                }
+                case VPALIGN.ML: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        ( r >= 1 ) ? 1 : 2 * r - 1,
+                        ( r >= 1 ) ? -1 / r : -1,
+                        ( r >= 1 ) ? 1 / r : 1
+                    )
+
+                    break
+                }
+                case VPALIGN.MC: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : -r,
+                        ( r >= 1 ) ? 1 : r,
+                        ( r >= 1 ) ? -1 / r : -1,
+                        ( r >= 1 ) ? 1 / r : 1
+                    )
+
+                    break
+                }
+                case VPALIGN.MR: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : 1 - 2 * r,
+                         1,
+                        ( r >= 1 ) ? -1 / r : -1,
+                        ( r >= 1 ) ? 1 / r : 1
+                    )
+
+                    break
+                }
+                case VPALIGN.BL: {
+                    scene.getCamera().projPerspective(
+                        -1,
+                        ( r >= 1 ) ? 1 : 2 * r - 1,
+                        -1,
+                        ( r >= 1 ) ? 2 / r - 1 : 1
+                    )
+
+                    break
+                }
+                case VPALIGN.BC: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : -r,
+                        ( r >= 1 ) ? 1 : r,
+                        -1,
+                        ( r >= 1 ) ? 2 / r - 1 : 1
+                    )
+
+                    break
+                }
+                case VPALIGN.BR: {
+                    scene.getCamera().projPerspective(
+                        ( r >= 1 ) ? -1 : 1 - 2 * r,
+                         1,
+                        -1,
+                        ( r >= 1 ) ? 2 / r - 1 : 1
+                    )
+
+                    break
+                }
+            }
         }
         default: {
             console.log( "No match found!" )
@@ -243,7 +594,19 @@ for ( let i = 0; i < alignmentRadios.length; i++ ) {
         }
 
         currAlign = Number( this.value )
-        setupViewer()
+    } )
+}
+
+// crop
+const cropRadios = document.cropForm.crop
+let cropPrev = null
+for ( let i = 0; i < cropRadios.length; i++ ) {
+    cropRadios[ i ].addEventListener( "change", function() {
+        if ( this !== cropPrev ) {
+            cropPrev = this
+        }
+
+        currCrop = Number( this.value )
     } )
 }
 
@@ -256,7 +619,27 @@ behaviorSelect.addEventListener( "change", function() {
     }
 
     currMode = Number( this.value )
-    setupViewer()
+
+    if ( currMode > 0 ) {
+        document.alignmentForm.style.visibility = "visible"
+        document.alignmentForm.style.height = "100%"
+    } else {
+        document.alignmentForm.style.visibility = "hidden"
+        document.alignmentForm.style.height = "0"
+    }
+
+    if ( currMode == 4 ) {
+        document.cropForm.style.visibility = "visible"
+        document.cropForm.style.height = "100%"
+    } else {
+        document.cropForm.style.visibility = "hidden"
+        document.cropForm.style.height = "0"
+    }
+    
+    if ( currMode < 3 ) {
+        resizerEl.style.width  = Math.max( DEFAULT_SIZE, resizerEl.offsetWidth ) + "px"
+        resizerEl.style.height = Math.max( DEFAULT_SIZE, resizerEl.offsetHeight ) + "px"
+    }
 } )
 
 // set property of graph drawer

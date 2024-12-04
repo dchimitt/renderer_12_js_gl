@@ -19,17 +19,14 @@
                 <option value="1">Letterbox</option>
                 <option value="2">Letterbox & Scale</option>
                 <option value="3">Crop</option>
-                <option value="4">Crop & Letterbox</option>
+                <option value="4">Crop & Letterbox (Decoupled)</option>
                 <option value="5">Crop & Scale</option>
             </select> 
 
-            <br><br>
-
-            <form name="alignmentForm">
-                <label for="TLradio">Alignment:</label>
+            <form name="alignmentForm" style="visibility: hidden; height: 0;">
+                <br><br>
+                <label for="TLradio">Letterbox Alignment:</label>
                 <div id="radioContainer">
-                    <!-- Not implemented -->
-                    <!-- Idea:  "value" -> ten-keypad to quickly change -->
                     <div>
                         <input type="radio" id="TLradio" name="alignment" value="7" checked/>
                         <input type="radio" id="TCradio" name="alignment" value="8"/>
@@ -44,6 +41,28 @@
                         <input type="radio" id="BLradio" name="alignment" value="1"/>
                         <input type="radio" id="BCradio" name="alignment" value="2"/>
                         <input type="radio" id="BRradio" name="alignment" value="3"/>
+                    </div>
+                </div>
+            </form>
+
+            <form name="cropForm" style="visibility: hidden; height: 0;">
+                <br><br>
+                <label for="cTLradio">Crop Alignment:</label>
+                <div id="radioContainer">
+                    <div>
+                        <input type="radio" id="cTLradio" name="crop" value="7" checked/>
+                        <input type="radio" id="cTCradio" name="crop" value="8"/>
+                        <input type="radio" id="cTRradio" name="crop" value="9"/>
+                    </div>
+                    <div>
+                        <input type="radio" id="cMLradio" name="crop" value="4"/>
+                        <input type="radio" id="cMCradio" name="crop" value="5"/>
+                        <input type="radio" id="cMRradio" name="crop" value="6"/>
+                    </div>
+                    <div>
+                        <input type="radio" id="cBLradio" name="crop" value="1"/>
+                        <input type="radio" id="cBCradio" name="crop" value="2"/>
+                        <input type="radio" id="cBRradio" name="crop" value="3"/>
                     </div>
                 </div>
             </form>
