@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="fileHTML.css">
     </head>
     <body>
-        <div id = "title">Bundler Test</div>
+        <div id = "title">Web Renderer Demo</div>
         
         <div id = "resizer">
             <canvas id = "pixels"></canvas>
@@ -12,8 +12,10 @@
 
         <fieldset>
             <legend>Viewport Settings</legend>
+
+            <p id="resizeNote">Minimum resizing allowed</p>
+
             <label for="behaviorDropDown">Behavior:</label>
-            <!-- Not implemented -->
             <select name="behavior" id="behaviorDropDown">
                 <option value="0" selected>Distort</option>
                 <option value="1">Letterbox</option>

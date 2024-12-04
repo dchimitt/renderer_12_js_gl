@@ -28,6 +28,7 @@ scene.getPosition(0).matrix = renderer.Matrix.translate(0, 0, -3);
 let currAlign = VPALIGN.TL
 let currMode = VPMODE.DISTORT
 let currCrop = VPALIGN.TL
+
 // use new ResizeObserver to limit minimum size
 // https://stackoverflow.com/a/39312522
 // 96.94% browser support https://caniuse.com/resizeobserver
@@ -53,11 +54,6 @@ setInterval(rotate, 1000/40);
 
 function rotate() {
     scene.getPosition(0).matrix.mult(renderer.Matrix.rotateY(1));
-    //let x = Math.ceil( 30 * Math.sin( 0.0015 * Date.now() ) + 35 )
-    //let x = 4
-    //let col = scene.getPosition( 0 ).model.getColor()
-    //scene.getPosition( 0 ).model = scene.getPosition( 0 ).model.remake( x, x )
-    //renderer.setColor( scene.getPosition( 0 ).model, col )
 
     display();
 }
@@ -81,11 +77,14 @@ function display() {
 // maybe this could be somewhere else?
 function setupViewer() {
     switch ( currMode ) {
+        // MODE:  Distort
         case VPMODE.DISTORT: {
             fb.setViewport( fb.width, fb.height, 0, 0, renderer.Color.BLACK )
             scene.getCamera().projPerspective()
             break
         }
+
+        // MODE:  Letterbox
         case VPMODE.LETTERBOX: {
             const wFB = fb.width
             const hFB = fb.height
@@ -147,6 +146,8 @@ function setupViewer() {
 
             break
         }
+
+        // MODE:  Letterbox and Scale
         case VPMODE.LETTERBOXSCALE: {
             const wFB = fb.width
             const hFB = fb.height
@@ -208,6 +209,8 @@ function setupViewer() {
 
             break
         }
+
+        // MODE:  Crop
         case VPMODE.CROP: {
             const wFB = fb.width
             const hFB = fb.height
@@ -319,6 +322,8 @@ function setupViewer() {
 
             break
         }
+
+        // MODE:  Crop and Letterbox (Decoupled)
         case VPMODE.CROPLETTERBOX: {
             const wFB = fb.width
             const hFB = fb.height
@@ -475,6 +480,8 @@ function setupViewer() {
 
             break
         }
+
+        // MODE:  Crop and Scale
         case VPMODE.CROPSCALE: {
             const wFB = fb.width
             const hFB = fb.height
@@ -578,9 +585,6 @@ function setupViewer() {
                 }
             }
         }
-        default: {
-            console.log( "No match found!" )
-        }
     }
 }
 
@@ -637,8 +641,14 @@ behaviorSelect.addEventListener( "change", function() {
     }
     
     if ( currMode < 3 ) {
+        document.getElementById( "resizeNote" ).innerHTML = "Minimum resizing disabled"
+        document.getElementById( "resizeNote" ).style.color = "#800000"
+
         resizerEl.style.width  = Math.max( DEFAULT_SIZE, resizerEl.offsetWidth ) + "px"
         resizerEl.style.height = Math.max( DEFAULT_SIZE, resizerEl.offsetHeight ) + "px"
+    } else {
+        document.getElementById( "resizeNote" ).innerHTML = "Minimum resizing enabled"
+        document.getElementById( "resizeNote" ).style.color = "#008000"
     }
 } )
 
