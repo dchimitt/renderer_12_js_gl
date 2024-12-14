@@ -97,47 +97,47 @@ function setupViewer() {
             switch ( currAlign ) {
                 case VPALIGN.TL: {
                     fb.setViewport( dVP, dVP, 0, 0, renderer.Color.BLACK )
-                    
+
                     break
                 }
                 case VPALIGN.TC: {
                     fb.setViewport( dVP, dVP, hOffset, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.TR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.ML: {
                     fb.setViewport( dVP, dVP, 0, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MC: {
                     fb.setViewport( dVP, dVP, hOffset, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BL: {
                     fb.setViewport( dVP, dVP, 0, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BC: {
                     fb.setViewport( dVP, dVP, hOffset, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
             }
@@ -160,51 +160,51 @@ function setupViewer() {
             switch ( currAlign ) {
                 case VPALIGN.TL: {
                     fb.setViewport( dVP, dVP, 0, 0, renderer.Color.BLACK )
-                    
+
                     break
                 }
                 case VPALIGN.TC: {
                     fb.setViewport( dVP, dVP, hOffset, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.TR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.ML: {
                     fb.setViewport( dVP, dVP, 0, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MC: {
                     fb.setViewport( dVP, dVP, hOffset, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BL: {
                     fb.setViewport( dVP, dVP, 0, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BC: {
                     fb.setViewport( dVP, dVP, hOffset, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BR: {
                     fb.setViewport( dVP, dVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
             }
-            
+
             scene.getCamera().projPerspective()
 
             break
@@ -238,7 +238,7 @@ function setupViewer() {
                          1 - ( 2 * hVP ) / DEFAULT_SIZE,
                          1
                     )
-                
+
                     break
                 }
                 case VPALIGN.TR: {
@@ -249,7 +249,7 @@ function setupViewer() {
                          1 - ( 2 * hVP ) / DEFAULT_SIZE,
                          1
                     )
-                
+
                     break
                 }
                 case VPALIGN.ML: {
@@ -260,7 +260,7 @@ function setupViewer() {
                         -hVP / DEFAULT_SIZE,
                          hVP / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
                 case VPALIGN.MC: {
@@ -271,7 +271,7 @@ function setupViewer() {
                         -hVP / DEFAULT_SIZE,
                          hVP / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
                 case VPALIGN.MR: {
@@ -282,7 +282,7 @@ function setupViewer() {
                         -hVP / DEFAULT_SIZE,
                          hVP / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
                 case VPALIGN.BL: {
@@ -293,7 +293,7 @@ function setupViewer() {
                         -1,
                         -1 + (2  * hVP ) / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
                 case VPALIGN.BC: {
@@ -304,7 +304,7 @@ function setupViewer() {
                         -1,
                         -1 + ( 2 * hVP ) / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
                 case VPALIGN.BR: {
@@ -315,7 +315,7 @@ function setupViewer() {
                         -1,
                         -1 + ( 2 * hVP ) / DEFAULT_SIZE
                     )
-                
+
                     break
                 }
             }
@@ -340,47 +340,47 @@ function setupViewer() {
             switch ( currAlign ) {
                 case VPALIGN.TL: {
                     fb.setViewport( wVP, hVP, 0, 0, renderer.Color.BLACK )
-                    
+
                     break
                 }
                 case VPALIGN.TC: {
                     fb.setViewport( wVP, hVP, hOffset, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.TR: {
                     fb.setViewport( wVP, hVP, wFB - dVP, 0, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.ML: {
                     fb.setViewport( wVP, hVP, 0, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MC: {
                     fb.setViewport( wVP, hVP, hOffset, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.MR: {
                     fb.setViewport( wVP, hVP, wFB - dVP, vOffset, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BL: {
                     fb.setViewport( wVP, hVP, 0, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BC: {
                     fb.setViewport( wVP, hVP, hOffset, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
                 case VPALIGN.BR: {
                     fb.setViewport( wVP, hVP, wFB - dVP, hFB - dVP, renderer.Color.BLACK )
-                
+
                     break
                 }
             }
@@ -639,7 +639,7 @@ behaviorSelect.addEventListener( "change", function() {
         document.cropForm.style.visibility = "hidden"
         document.cropForm.style.height = "0"
     }
-    
+
     if ( currMode < 3 ) {
         document.getElementById( "resizeNote" ).innerHTML = "Minimum resizing disabled"
         document.getElementById( "resizeNote" ).style.color = "#800000"
