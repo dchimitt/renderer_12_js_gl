@@ -75,6 +75,7 @@
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
 import {format} from "../scene/util/UtilExport.js";
+import { setColor } from "../scene/util/ModelShading.js"
 
 export default class SphereSector extends Model
 {
@@ -210,8 +211,9 @@ export default class SphereSector extends Model
     * @param {number} k the new vertical line count
     * @returns {SphereSector} the new model with the same parameters but different line counts
     */
-   remake(n, k)
-   {
-      return new SphereSector(this.#r, this.#theta1, this.#theta2, this.#phi1, this.#phi2, n, k);
+   remake(n, k) {
+      let sphereSec = new SphereSector(this.#r, this.#theta1, this.#theta2, this.#phi1, this.#phi2, n, k);
+
+      return sphereSec
    }
 }//SphereSector

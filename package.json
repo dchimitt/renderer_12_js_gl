@@ -4,5 +4,9 @@
     "devDependencies": 
     {
         "webpack-cli": "^5.1.4"
+    },
+
+    "dependencies": {
+        "@viz-js/viz": "3.11.0"
     }
 }

@@ -16,8 +16,7 @@
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
 import {format} from "../scene/util/UtilExport.js";
 
-export default class BarycentricTriangle extends Model 
-{
+export default class BarycentricTriangle extends Model {
    /**@type {number}*/ #theta;
    /**@type {number}*/ #n;
 
@@ -31,14 +30,11 @@ export default class BarycentricTriangle extends Model
       @param {number} n          number of barycentric subdivisions of this triangle
       @param {number} [theta=0]  rotation (in degrees) of the equilateral triangle
    */
-   constructor(n, theta = 0)
-   {
-      super(undefined, undefined, undefined, undefined, undefined,  
-            format("Barycentric Triangle(%.2f,%d)", theta, n),
-            true);
+   constructor( n, theta = 0 ) {
+      super()
 
       if (n < 0)
-         throw new Error("n must be greater than or equal to 0");
+         throw new Error( "n must be greater than or equal to 0" );
 
       this.#theta = theta;
       this.#n = n;

@@ -427,11 +427,13 @@ export default class Viewport
         if (typeof filename != "string")
             throw new Error("Filename must be a String");
 
+        /* - TODO - don't support dumping to file yet
         this.#parent.dumpPixels2File(this.#vp_ul_x,
                                      this.#vp_ul_y,
                                      this.#vp_lr_x,
                                      this.#vp_lr_y,
                                      filename);
+        */
     }
 
 
@@ -542,6 +544,7 @@ export default class Viewport
         console.log("vp2.getPixelVP(1, 1");
         console.log(vp2.getPixelVP(1, 1).toString());
 
+        /* TODO - do not support dumping to file yet
         console.log("");
         console.log("vp1.dumpVP2File(VP1.ppm)");
         vp1.dumpVP2File("VP1.ppm");
@@ -561,5 +564,6 @@ export default class Viewport
         console.log("");
         console.log("vp1.convertVP2FB()");
         console.log(vp1.convertVP2FB().toString());
+        */
     }
 }

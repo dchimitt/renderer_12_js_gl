@@ -16,7 +16,7 @@ const configOpts =
         filename: "rendererBundle.js",
 
         // where to put the bundle I chose inside the renderer folder
-        path: path.join(__dirname, "./renderer"),
+        path: path.join(__dirname, "./renderer_out"),
 
         // make the bundle to be used as a package for imports
         // https://webpack.js.org/guides/author-libraries/
