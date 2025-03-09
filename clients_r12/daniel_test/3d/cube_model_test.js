@@ -1,5 +1,5 @@
 import { Scene, Camera, Position, Matrix, Model, Vertex, Vector } from "../../../renderer/scene/SceneExport.js";
-import { createShader, createProgram, resizeCanvasToMatchDisplay } from "../../../renderer/scene/util/Daniel_GL_util.js";
+import { createShader, createProgram, resizeCanvasToMatchDisplay } from "../../../renderer/pipeline/Daniel_GL_util.js";
 import Cube from "../../../renderer/models_L/Cube.js";
 
 const vertexShaderSource = `#version 300 es
