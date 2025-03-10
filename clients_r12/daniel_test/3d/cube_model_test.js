@@ -44,31 +44,33 @@ function main() {
 
     // Set up camera in perspective projection mode
     let camera = new Camera(-1, 1, -1, 1, -1, true, Matrix.identity());
-    console.log("camera: ", camera);
 
-    // Create cube models and apply transformations
-    let cubeModel = new Cube();
-    let cubeModelMatrix1 = Matrix.translate(0, -0.5, 0);
-    let cubeModelMatrix2 = Matrix.rotateY(Math.PI / 4); 
+    // Create cube models
+    let cubeModel1 = new Cube();
+    let cubeModel2 = new Cube();
 
-    // Create two cube positions with their associated transformation matrix 
-    let p1 = new Position(cubeModel, cubeModelMatrix1);
-    let p2 = new Position(cubeModel, cubeModelMatrix2); 
+    // Create transformation matrices for each cube
+    // Currently, both models are translated together. However, rotation is applied to only model 2
+    let cubeModelMatrix1 = Matrix.translate(1, 0.5, 3); 
+    let cubeModelMatrix2 = Matrix.rotateZ(45); 
+
+    // Create two position objects with the cube models and their transformation matrices
+    let p1 = new Position(cubeModel1, cubeModelMatrix1); 
+    let p2 = new Position(cubeModel2, cubeModelMatrix2); 
 
     // Create a list of positions and then call the scene constructor with that list
     let positionList = [p1, p2];
     let scene = new Scene(camera, positionList);
+    console.log(scene);
 
-    // Convert the list of vertices into a flat array of form [(x1, y1, z1), (x2, y2, z2)...]
-    let cubeVertices = cubeModel.getVertexList();
-    console.log("cubeVertices", cubeVertices);
-    let cubeVerticesFlat = [];
-    for (let i = 0; i < cubeVertices.length; i++) {
-        cubeVerticesFlat.push(cubeVertices[i].x, cubeVertices[i].y, cubeVertices[i].z);
-    }
-    console.log("cubeVerticesFlat: ", cubeVerticesFlat);
+    // Get the vertices for cube1 and cube2, and then convert them into a flat array
+    let cubeVertices1 = cubeModel1.getVertexList(); 
+    let cubeVertices2 = cubeModel2.getVertexList(); 
+    let cubeVerticesFlat1 = flattenVertices(cubeVertices1);
+    let cubeVerticesFlat2 = flattenVertices(cubeVertices2);
 
-    // Define the cube's edges and then get a flat array of the index pairs
+    // Define the cube's edges and then get a flat array of the index pairs (need this to tell WebGL which lines to draw)
+    // Would be different if drawing with triangle primitives
     let cubeEdges = [
         [0, 1], [1, 2], [2, 3], [3, 0], // bottom face lines
         [4, 5], [5, 6], [6, 7], [7, 4], // top face lines
@@ -78,40 +80,42 @@ function main() {
     for (let i = 0; i < cubeEdges.length; i++) {
         cubeEdgeIndices.push(cubeEdges[i][0], cubeEdges[i][1]);
     }
-    console.log("cubeEdgeIndices", cubeEdgeIndices);
 
     // Clear canvas and set black background color
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.enable(gl.DEPTH_TEST); // Enable depth-testing (used in 3D rendering) --- currently does nothing?
+    gl.enable(gl.DEPTH_TEST); // Enable depth-testing for 3D rendering (currently does nothing)
 
     // Create VAO (WebGL2 specific, reduces redundancy)
     let vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
 
-    // Create WebGL-compatiblebuffer for the vertex positions
-    let positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVerticesFlat), gl.STATIC_DRAW);
+    // Create WebGL-compatible buffer for the vertex positions of both cubes
+    let positionBuffer1 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer1);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVerticesFlat1), gl.STATIC_DRAW);
+    let positionBuffer2 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer2);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVerticesFlat2), gl.STATIC_DRAW);
 
-    // Tell the attribute how to get data out of positionLocation and then turn it on
-    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(positionLocation);
-
-    // Create WebGL-compatible buffer for the vertex indices
+    // Bind the index buffer for drawing the cube edges
     let indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeEdgeIndices), gl.STATIC_DRAW);
 
-    // Set up variables to get the camera's perspective projection matrix (did not see method to return this)
+    // Set up the position attribute for the cube vertices
+    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Set up the perspective projection matrix
+    // Note: I defined a new variable, far, as current camera module uses an infinite far distance
     let left = camera.left;
     let right = camera.right;
     let bottom = camera.bottom;
     let top = camera.top;
-    let near = camera.n; // adjusting near/far gives different shapes..
-    let far = 100; // not in constructor?
-    console.log("camera: ", camera);
+    let near = camera.n; 
+    let far = 1000; 
 
     /*
         gl-matrix definition:
@@ -120,38 +124,28 @@ function main() {
         Formula:
         https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix.html
 
-        var m4 = {
-            perspective: function(fieldOfViewInRadians, aspect, near, far) {
-                var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
-                var rangeInv = 1.0 / (near - far);
- 
-                return [
-                    f / aspect, 0, 0, 0,
-                    0, f, 0, 0,
-                    0, 0, (near + far) * rangeInv, -1,
-                    0, 0, near * far * rangeInv * 2, 0
-                ];
-            },
+        I multiplied c1 times negative 1 so that translations in x direction are not reversed
     */
-    let c1 = new Vector(2 * near / (right - left) ,                         0 , (right + left) / (right - left) ,                              0);
-    let c2 = new Vector(                        0 , 2 * near / (top - bottom) , (top + bottom) / (top - bottom) ,                              0);
-    let c3 = new Vector(                        0 ,                         0 ,    -(far + near) / (far - near) , -2 * far * near / (far - near));
-    let c4 = new Vector(                        0 ,                         0 ,                              -1 ,                              0);
+    let c1 = new Vector(-2 * near / (right - left) ,                         0 , (right + left) / (right - left) ,                              0);
+    let c2 = new Vector(                         0 , 2 * near / (top - bottom) , (top + bottom) / (top - bottom) ,                              0);
+    let c3 = new Vector(                         0 ,                         0 ,    -(far + near) / (far - near) , -2 * far * near / (far - near));
+    let c4 = new Vector(                         0 ,                         0 ,                              -1 ,                              0);
     let projectionMatrix = Matrix.buildFromColumns(c1, c2, c3, c4);
     console.log("projectionMatrix: ", projectionMatrix);
 
     // Loop through each position in the scene and render through WebGL
     for (let position of scene.getPositionList()) {
-        // Get the camera's view matrix
-        let modelViewMatrix = camera.getViewMatrix();
-        console.log("modelViewMatrix: ", modelViewMatrix);
+        // Get the model matrix at the current position
+        let modelMatrix = position.getMatrix();
+        console.log("Current modelMatrix: " + modelMatrix);
 
-        let positionModelMatrix = position.getMatrix();
-        
-        // Model transforms from object space to world space
-        // View "" "" "" from world space to camera space
-        // Projection "" "" "" from camera space to clip space
-        let modelViewProjectionMatrix = projectionMatrix.mult(modelViewMatrix).mult(positionModelMatrix);
+        // Get the camera's view matrix (this could change dynamically, so find this inside render loop as well)
+        let viewMatrix = camera.getViewMatrix();
+        console.log("Current viewMatrix: " + modelMatrix);
+
+        // Calculate the model-view-projection (MVP) matrix for this position
+        let modelViewProjectionMatrix = projectionMatrix.mult(viewMatrix).mult(modelMatrix);
+        console.log("Current MVP: " + modelViewProjectionMatrix);
 
         // Convert the MVP to WebGL-compatible form
         let finalMatrixToPass = new Float32Array(16);
@@ -192,12 +186,21 @@ function main() {
         currentIndex++
         finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v4.w;  
 
-        console.log("finalMatrixToPass: ", finalMatrixToPass);
+        // Send the MVP to the shader functions
+        gl.uniformMatrix4fv(matrixLocation, false, finalMatrixToPass); 
 
-        gl.uniformMatrix4fv(matrixLocation, false, finalMatrixToPass); // Send the MVP to the shader functions
-
-        gl.drawElements(gl.LINES, cubeEdgeIndices.length, gl.UNSIGNED_SHORT, 0); // Draw models with lines
+        // Draw the current model using lines
+        gl.drawElements(gl.LINES, cubeEdgeIndices.length, gl.UNSIGNED_SHORT, 0);
     }
+}
+
+// Utility function to flatten the vertices of a 3D object into a flat array
+function flattenVertices(vertices) {
+    let flatArray = [];
+    for (let vertex of vertices) {
+        flatArray.push(vertex.x, vertex.y, vertex.z);
+    }
+    return flatArray;
 }
 
 main();
