@@ -16,9 +16,10 @@ const fragmentShaderSource = `#version 300 es
 
 precision highp float;
 out vec4 fragColor;
+uniform vec4 u_color;
 
 void main() {
-    fragColor = vec4(1.0, 1.0, 1.0, 1.0); // white
+    fragColor = u_color;
 }
 `;
 
@@ -41,6 +42,7 @@ function main() {
     // Get attribute and uniform locations
     const positionLocation = gl.getAttribLocation(program, "a_position");
     const matrixLocation = gl.getUniformLocation(program, "u_matrix");
+    const colorLocation = gl.getUniformLocation(program, "u_color");
 
     // Set up camera in perspective projection mode
     let camera = new Camera(-1, 1, -1, 1, -1, true, Matrix.identity());
@@ -147,60 +149,59 @@ function main() {
         let modelViewProjectionMatrix = projectionMatrix.mult(viewMatrix).mult(modelMatrix);
         console.log("Current MVP: " + modelViewProjectionMatrix);
 
-        // Convert the MVP to WebGL-compatible form
-        let finalMatrixToPass = new Float32Array(16);
-        let currentIndex = 0;
-
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v1.x;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v1.y;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v1.z;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v1.w; 
-        currentIndex++
-
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v2.x;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v2.y; 
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v2.z; 
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v2.w; 
-        currentIndex++
-
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v3.x;   
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v3.y;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v3.z;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v3.w;  
-        currentIndex++
-
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v4.x; 
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v4.y;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v4.z;  
-        currentIndex++
-        finalMatrixToPass[currentIndex] = modelViewProjectionMatrix.v4.w;  
+        // Convert the MVP matrix to WebGL-compatible form
+        let finalMatrixToPass = convertMatrixToFloat32Array(modelViewProjectionMatrix); 
 
         // Send the MVP to the shader functions
         gl.uniformMatrix4fv(matrixLocation, false, finalMatrixToPass); 
+
+        if (position === p1) {
+            gl.uniform4f(colorLocation, 1.0, 0.0, 0.0, 1.0);  // Red
+        } 
+        else if (position === p2) {
+            gl.uniform4f(colorLocation, 0.0, 0.0, 1.0, 1.0);  // Blue
+        }
 
         // Draw the current model using lines
         gl.drawElements(gl.LINES, cubeEdgeIndices.length, gl.UNSIGNED_SHORT, 0);
     }
 }
 
-// Utility function to flatten the vertices of a 3D object into a flat array
+// Convert the vertices of a 3D object into a flat array
 function flattenVertices(vertices) {
     let flatArray = [];
     for (let vertex of vertices) {
         flatArray.push(vertex.x, vertex.y, vertex.z);
     }
     return flatArray;
+}
+
+// Convert a 4x4 matrix to a Float32Array for WebGL
+function convertMatrixToFloat32Array(matrix) {
+    let finalMatrixToPass = new Float32Array(16);
+    let currentIndex = 0;
+
+    finalMatrixToPass[currentIndex] = matrix.v1.x; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v1.y; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v1.z; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v1.w; currentIndex++;
+
+    finalMatrixToPass[currentIndex] = matrix.v2.x; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v2.y; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v2.z; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v2.w; currentIndex++;
+
+    finalMatrixToPass[currentIndex] = matrix.v3.x; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v3.y; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v3.z; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v3.w; currentIndex++;
+
+    finalMatrixToPass[currentIndex] = matrix.v4.x; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v4.y; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v4.z; currentIndex++;
+    finalMatrixToPass[currentIndex] = matrix.v4.w; currentIndex++;
+
+    return finalMatrixToPass;
 }
 
 main();
