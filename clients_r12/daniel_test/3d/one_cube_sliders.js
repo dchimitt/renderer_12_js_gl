@@ -155,62 +155,74 @@ function main() {
     const scaleY_Slider     = document.getElementById("ScaleY");
     const scaleZ_Slider     = document.getElementById("ScaleZ");
 
-    // Translation slider event-handlers (not working)
+    // Translation slider event-handlers
     translateX_Slider.addEventListener("input", function (e) {
-        let value = parseFloat(e.target.value); // Need the values as a number (event e returns .toString)
+        let value = parseFloat(e.target.value); // Need the value as a number (event e returns .toString)
         
         // Get x, y, and z components of the new matrix
         let x = value;
-        let y = cubeModelMatrix.v2.x;
-        let z = cubeModelMatrix.v3.z;
+        let y = 0;
+        let z = 0;
 
-        console.log("Before translateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
-        cubeModelMatrix = Matrix.translate(value, cubeModelMatrix.v4.y, cubeModelMatrix.v4.z);
-        console.log("After translateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
+        // console.log("Before translateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", 3");
+        cubeModelMatrix = Matrix.translate(x, y, z);
+        // console.log("After translateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", 3");
 
         updateModelMatrixSlider();
     });
     translateY_Slider.addEventListener("input", function (e) {
         let value = parseFloat(e.target.value); 
 
-        let x = cubeModelMatrix.v4.x;  
+        let x = 0;
         let y = value;  
-        let z = cubeModelMatrix.v4.z;  
+        let z = 0;
     
-        console.log("Before translateY: ", cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
-        cubeModelMatrix = Matrix.translate(cubeModelMatrix.v4.x, value, cubeModelMatrix.v4.z);
-        console.log("After translateY: ", cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
+        // console.log("Before translateY: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", 3");
+        cubeModelMatrix = Matrix.translate(x, y, z);
+        // console.log("Before translateY: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", 3");
     
         updateModelMatrixSlider();
     });
     translateZ_Slider.addEventListener("input", function (e) {
         let value = parseFloat(e.target.value); 
         
-        let x = cubeModelMatrix.v4.x;  
-        let y = cubeModelMatrix.v4.y; 
+        let x = 0; 
+        let y = 0;
         let z = value;
     
-        console.log("Before translateZ: ", x, y, z);
+        // console.log("Before translateZ: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
         cubeModelMatrix = Matrix.translate(x, y, z);
-        console.log("After translateZ: ", cubeModelMatrix.v4.x, cubeModelMatrix.v4.y, cubeModelMatrix.v4.z);
+        // console.log("After translateZ: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
     
         updateModelMatrixSlider();
     });
 
-    // Rotation slider event-handlers (working)
+    // Rotation slider event-handlers
     rotateX_Slider.addEventListener("input", function (e) {
         let theta = parseFloat(e.target.value);
+
+        // console.log("Before rotateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
         cubeModelMatrix = Matrix.rotateX(theta);
+        // console.log("After rotateX: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
+
         updateModelMatrixSlider();
     });
     rotateY_Slider.addEventListener("input", function (e) {
         let theta = parseFloat(e.target.value);
+
+        // console.log("Before rotateY: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
         cubeModelMatrix = Matrix.rotateY(theta);
+        // console.log("After rotateY: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
+
         updateModelMatrixSlider();
     });
     rotateZ_Slider.addEventListener("input", function (e) {
         let theta = parseFloat(e.target.value);
+
+        // console.log("Before rotateZ: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
         cubeModelMatrix = Matrix.rotateZ(theta);
+        // console.log("After rotateZ: " + cubeModelMatrix.v4.x + ", " + cubeModelMatrix.v4.y + ", " + cubeModelMatrix.v4.z);
+
         updateModelMatrixSlider();
     });
 
@@ -222,7 +234,7 @@ function main() {
         let y = cubeModelMatrix.v2.y;
         let z = cubeModelMatrix.v3.z;
     
-        console.log("Ratios before scaleX: " + x + ", ", y + ", ", z);
+        console.log("Ratios before scaleX: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
         cubeModelMatrix = Matrix.scaleXYZ(x, y, z);
         console.log("Ratios after scaleY: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
     
@@ -235,22 +247,22 @@ function main() {
         let y = value;
         let z = cubeModelMatrix.v3.z;
     
-        console.log("Ratios before scaleY: " + x + ", ", y + ", ", z);
+        // console.log("Ratios before scaleY: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
         cubeModelMatrix = Matrix.scaleXYZ(x, y, z);
-        console.log("Ratios after scaleY: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
+        // console.log("Ratios after scaleY: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
     
         updateModelMatrixSlider();
     });
     scaleZ_Slider.addEventListener("input", function (e) {
         let value = parseFloat(e.target.value); 
         
-        let x = cubeModelMatrix.v1.x;  
+        let x = cubeModelMatrix.v1.x;
         let y = cubeModelMatrix.v2.y;
         let z = value;
     
-        console.log("Ratios before scaleZ: " + x + ", ", y + ", ", z);
+        // console.log("Ratios before scaleZ: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
         cubeModelMatrix = Matrix.scaleXYZ(x, y, z);
-        console.log("Ratios after scaleZ: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
+        // console.log("Ratios after scaleZ: " + cubeModelMatrix.v1.x + ", " + cubeModelMatrix.v2.y + ", " + cubeModelMatrix.v3.z);
     
         updateModelMatrixSlider();
     });
