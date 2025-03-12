@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Removes scrollbars */
+}
+
+canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh; /* Make the canvas fill the entire window */
+}
+
+/* Make a flex-container for the sliders */
+.slider-container {
+    position: absolute;
+    left: 10px; /* Start the container 10px from left edge */
+    margin: 10px; /* Space outside */
+    padding: 10px; /* Space inside */
+    background-color: rgba(0, 0, 0, 0.0); /* Flex-container background color */
+    color: white; /* Text color */
+    display: flex;
+    flex-direction: row; /* Row vs. column determines the main axis */
+    align-items: center;
+}
+
+.slider-container label {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.slider-container input[type="range"] {
+    width: 70%; /* This will adjust the slider widths */
+    margin-right: 10px; /* This is the spacing between slider and the values to the right */
+}
+
+.slider-container span {
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+/* Positioning of Translate sliders */
+#TranslateXContainer {
+    top: 0px; /* Top-left */
+}
+#TranslateYContainer {
+    top: 50px; /* Below prior */
+}
+#TranslateZContainer {
+    top: 100px; /* below prior */
+}
+
+/* Positioning of Rotate sliders */
+#RotateXContainer {
+    left: 42%; /* Roughly centered */
+    top: 0px; 
+}
+#RotateYContainer {
+    left: 42%; 
+    top: 50px; 
+}
+#RotateZContainer {
+    left: 42%; 
+    top: 100px; 
+}
+
+/* Positioning of Scale sliders */
+#ScaleXContainer {
+    left: 80%; /* Top right */
+    top: 0px; 
+}
+#ScaleYContainer {
+    left: 80%; 
+    top: 50px;
+}
+#ScaleZContainer {
+    left: 80%; 
+    top: 100px; 
+}
